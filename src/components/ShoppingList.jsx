@@ -1,25 +1,31 @@
-import React, { useState } from "react";
-import ItemForm from "./ItemForm";
-import Filter from "./Filter";
+import React from "react";
 import Item from "./Item";
+import Filter from "./Filter";
 
-function ShoppingList({ items }) {
-  const [selectedCategory, setSelectedCategory] = useState("All");
-
-  function handleCategoryChange(event) {
-    setSelectedCategory(event.target.value);
-  }
+// We set default values (= "") here so the code doesn't crash during tests
+function ShoppingList({
+  items = [],
+  search = "",
+  onSearchChange,
+  onCategoryChange,
+  selectedCategory = "All"
+}) {
 
   const itemsToDisplay = items.filter((item) => {
-    if (selectedCategory === "All") return true;
-
-    return item.category === selectedCategory;
+    // This line won't crash now because 'search' defaults to an empty string
+    const matchesSearch = item.name.toLowerCase().includes(search.toLowerCase());
+    const matchesCategory = selectedCategory === "All" || item.category === selectedCategory;
+    return matchesSearch && matchesCategory;
   });
 
   return (
     <div className="ShoppingList">
-      <ItemForm />
-      <Filter onCategoryChange={handleCategoryChange} />
+      <Filter
+        search={search}
+        onSearchChange={onSearchChange}
+        onCategoryChange={onCategoryChange}
+        selectedCategory={selectedCategory}
+      />
       <ul className="Items">
         {itemsToDisplay.map((item) => (
           <Item key={item.id} name={item.name} category={item.category} />
