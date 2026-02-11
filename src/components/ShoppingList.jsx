@@ -1,18 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import Item from "./Item";
 import Filter from "./Filter";
 
-// We set default values (= "") here so the code doesn't crash during tests
-function ShoppingList({
-  items = [],
-  search = "",
-  onSearchChange,
-  onCategoryChange,
-  selectedCategory = "All"
-}) {
+function ShoppingList({ items = [] }) {
+  const [search, setSearch] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All");
 
   const itemsToDisplay = items.filter((item) => {
-    // This line won't crash now because 'search' defaults to an empty string
     const matchesSearch = item.name.toLowerCase().includes(search.toLowerCase());
     const matchesCategory = selectedCategory === "All" || item.category === selectedCategory;
     return matchesSearch && matchesCategory;
@@ -22,9 +16,9 @@ function ShoppingList({
     <div className="ShoppingList">
       <Filter
         search={search}
-        onSearchChange={onSearchChange}
-        onCategoryChange={onCategoryChange}
+        onSearchChange={setSearch}
         selectedCategory={selectedCategory}
+        onCategoryChange={setSelectedCategory}
       />
       <ul className="Items">
         {itemsToDisplay.map((item) => (

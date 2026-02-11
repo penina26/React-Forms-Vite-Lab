@@ -1,34 +1,27 @@
-import React, { useState } from "react";
-import Item from "./Item";
-import Filter from "./Filter";
+import React from "react";
 
-function ShoppingList({ items = [] }) {
-  // We add local state so that when the test renders <ShoppingList /> 
-  // without props, the search bar still works as a 'controlled input'.
-  const [localSearch, setLocalSearch] = useState("");
-  const [localCategory, setLocalCategory] = useState("All");
-
-  const itemsToDisplay = items.filter((item) => {
-    const nameMatch = item.name.toLowerCase().includes(localSearch.toLowerCase());
-    const categoryMatch = localCategory === "All" || item.category === localCategory;
-    return nameMatch && categoryMatch;
-  });
-
+function Filter({ search, onSearchChange, onCategoryChange, selectedCategory }) {
   return (
-    <div className="ShoppingList">
-      <Filter
-        search={localSearch}
-        onSearchChange={setLocalSearch}
-        selectedCategory={localCategory}
-        onCategoryChange={setLocalCategory}
+    <div className="Filter">
+      <input
+        type="text"
+        name="search"
+        placeholder="Search..."
+        value={search}
+        onChange={(e) => onSearchChange(e.target.value)}
       />
-      <ul className="Items">
-        {itemsToDisplay.map((item) => (
-          <Item key={item.id} name={item.name} category={item.category} />
-        ))}
-      </ul>
+      <select
+        name="filter"
+        value={selectedCategory}
+        onChange={(e) => onCategoryChange(e.target.value)}
+      >
+        <option value="All">Filter by category</option>
+        <option value="Produce">Produce</option>
+        <option value="Dairy">Dairy</option>
+        <option value="Dessert">Dessert</option>
+      </select>
     </div>
   );
 }
 
-export default ShoppingList;
+export default Filter;
