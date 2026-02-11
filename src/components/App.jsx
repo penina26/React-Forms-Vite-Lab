@@ -20,7 +20,6 @@ function App() {
     <div className={"App " + (isDarkMode ? "dark" : "light")}>
       <Header isDarkMode={isDarkMode} onDarkModeClick={handleDarkModeClick} />
       <ItemForm onItemFormSubmit={handleAddItem} />
-      {/* App only needs to pass the items list now */}
       <ShoppingList items={items} />
     </div>
   );
